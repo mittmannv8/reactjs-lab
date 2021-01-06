@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   BrowserRouter,
   Link,
@@ -9,36 +9,33 @@ import {
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { RiReactjsLine } from "react-icons/ri";
 
-export const Home = () => {
-  return (
-    <ul>
-      <li>
-        <Link to="/exp1">Experiment One</Link>
-      </li>
-    </ul>
-  );
-};
-
-export const Exp1 = () => {
-  return <div>Exp 1</div>;
-};
+import Home from "./pages/Home";
+import lab from "./lab";
 
 const Header = () => {
   const location = useLocation();
 
+  const pageTitle = useMemo(() => {
+    if (location.pathname === "/") return "React Lab";
+
+    const experiment = lab.find(({ route }) => route === location.pathname);
+
+    return experiment?.name ?? location.pathname;
+  }, [location.pathname]);
+
   const isHome = location.pathname === "/";
-  const appName = isHome ? "Home" : location.pathname;
 
   return (
     <div className="Header">
       {isHome && <RiReactjsLine className="Icon home-icon" />}
+
       {!isHome && (
         <Link className="GoBackButton" to="/">
           <IoMdArrowRoundBack className="Icon" />
         </Link>
       )}
 
-      <h1 className="AppName">{appName}</h1>
+      <h1 className="AppName">{pageTitle}</h1>
     </div>
   );
 };
@@ -47,11 +44,14 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Header />
-
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/exp1" component={Exp1} />
-      </Switch>
+      <div className="app-container">
+        <Switch>
+          <Route exact path="/" component={Home} />
+          {lab.map(({ route, component }) => (
+            <Route exact path={route} component={component} />
+          ))}
+        </Switch>
+      </div>
     </BrowserRouter>
   );
 };
