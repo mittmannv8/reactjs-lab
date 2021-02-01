@@ -1,0 +1,50 @@
+$size: 30px;
+
+.Container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.Row {
+  height: $size;
+  display: flex;
+}
+
+@mixin spot() {
+  width: $size;
+  height: $size;
+
+  display: inline-block;
+
+  margin: 0;
+  padding: 0;
+}
+
+.label {
+  line-height: $size;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+  border: 1px solid transparent;
+
+  @include spot();
+}
+
+.Spot {
+  @include spot();
+  border: 1px solid black;
+
+  cursor: crosshair;
+
+  &:hover {
+    background-color: darkgray;
+  }
+
+  &.target {
+    cursor: not-allowed;
+    background-color: darkred;
+  }
+}

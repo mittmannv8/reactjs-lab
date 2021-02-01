@@ -48,7 +48,7 @@ const Router = () => {
         <Switch>
           <Route exact path="/" component={Home} />
           {lab.map(({ route, component }) => (
-            <Route exact path={route} component={component} />
+            <Route key={route} exact path={route} component={component} />
           ))}
         </Switch>
       </div>
